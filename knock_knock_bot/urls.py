@@ -19,7 +19,9 @@ from django.contrib import admin
 from server import views
 
 urlpatterns = [
-    url(r'^keyboard/', views.keyboard),
-    url(r'message', views.message),
+    url(r'keyboard/keyboard$', views.keyboard),
+    url(r'keyboard/message$', views.message),
+    url(r'keyboard/chat_room$', views.chat_room),
+    url(r'keyboard/friend$', views.friend),
     url(r'^admin/', admin.site.urls),
 ]
