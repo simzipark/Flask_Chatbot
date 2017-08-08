@@ -1,5 +1,5 @@
 from app import db
-from .message import BaseMessage, HomeMessage, SuccessMessage, FailMessage
+from .message import BaseMessage, HomeMessage, SuccessMessage, FailMessage, FindMessage
 from .model import User
 
 
@@ -13,6 +13,10 @@ class Singleton(type):
 
 
 class APIManager(metaclass=Singleton):
+    def get_find_msg_obj(self, message, company):
+        msg_obj = MessageHandler.get_find_message(message, company)
+        return msg_obj
+
     def process(self, mode, *args):
         try:
             options = {
@@ -22,6 +26,7 @@ class APIManager(metaclass=Singleton):
                 "block": self.block_friend,
                 "exit": self.exit_chatroom,
             }
+
             message = options.get(mode)(*args)
             response_code = 200
         except:
@@ -46,7 +51,15 @@ class APIManager(metaclass=Singleton):
         request_type = data["type"]
         content = data["content"]
 
-        message = MessageHandler.get_base_message()
+        if content == '택배 예약':
+            print('택배예약데스네')
+        elif content == '택배 조회':
+            print('택배조회데스')
+        else:
+            print('헬로월드')
+
+        #message = MessageHandler.get_base_message()
+        message = MessageHandler.get_find_message()
         return message
 
     def add_friend(self, data):
@@ -84,6 +97,10 @@ class APIManager(metaclass=Singleton):
 
 
 class MessageManager(metaclass=Singleton):
+    def get_find_message(self, message, company):
+        find_Message = FindMessage(message, company).get_message()
+        return find_Message
+
     def get_base_message(self):
         base_message = BaseMessage().get_message()
         return base_message

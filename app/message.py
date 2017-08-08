@@ -257,3 +257,33 @@ class SuccessMessage(Message):
     def __init__(self):
         super().__init__()
         self.returned_message = {"message": "SUCCESS", "comment": "정상 응답"}
+
+
+class FindMessage(BaseMessage):
+    def __init__(self, message, step):
+        '''
+        step 1: 택배 조회 -> 택배사 선택
+        step 2: 택배사 선택 -> 송장정보 입력
+        step 3: 송장정보 입력 -> 끝
+        '''
+
+        super().__init__()
+        self.updateMessage(message)
+
+        if step == 1:
+            self.updateMessage(Keyboard.company_button)
+        elif step == 2:
+            keyboard = {
+                'type': 'text',
+            }
+            self.returned_message['keyboard'] = keyboard
+        else:
+            self.updateMessate(Keyboard.company_button)
+
+
+class ReserveMessage(BaseMessage):
+    pass
+
+
+class SettingMessage(BaseMessage):
+    pass
