@@ -11,12 +11,7 @@ class Singleton(type):
             cls.instance = super(Singleton, cls).__call__(*args, **kwargs)
         return cls.instance
 
-
 class APIManager(metaclass=Singleton):
-    def get_find_msg_obj(self, message, company):
-        msg_obj = MessageHandler.get_find_message(message, company)
-        return msg_obj
-
     def process(self, mode, *args):
         try:
             options = {
@@ -52,14 +47,14 @@ class APIManager(metaclass=Singleton):
         content = data["content"]
 
         if content == '택배 예약':
-            print('택배예약데스네')
+            print('택배예약')
         elif content == '택배 조회':
-            print('택배조회데스')
+            print('택배조회')
         else:
             print('헬로월드')
 
         #message = MessageHandler.get_base_message()
-        message = MessageHandler.get_find_message()
+        message = MessageHandler.get_find_message('google', 1)
         return message
 
     def add_friend(self, data):
@@ -98,8 +93,8 @@ class APIManager(metaclass=Singleton):
 
 class MessageManager(metaclass=Singleton):
     def get_find_message(self, message, company):
-        find_Message = FindMessage(message, company).get_message()
-        return find_Message
+        find_message = FindMessage(message, company).get_message()
+        return find_message
 
     def get_base_message(self):
         base_message = BaseMessage().get_message()

@@ -266,19 +266,21 @@ class FindMessage(BaseMessage):
         step 2: 택배사 선택 -> 송장정보 입력
         step 3: 송장정보 입력 -> 끝
         '''
+		
+        print('find message - message : '+str(message)+' / step : '+str(step))
 
         super().__init__()
-        self.updateMessage(message)
+        self.update_message(message)
 
         if step == 1:
-            self.updateMessage(Keyboard.company_button)
+            self.update_keyboard(Keyboard.company_buttons)
         elif step == 2:
             keyboard = {
                 'type': 'text',
             }
             self.returned_message['keyboard'] = keyboard
         else:
-            self.updateMessate(Keyboard.company_button)
+            self.update_keyboard(Keyboard.company_buttons)
 
 
 class ReserveMessage(BaseMessage):
