@@ -1,3 +1,4 @@
+import requests
 from .keyboard import Keyboard
 from ujson import dumps, loads
 
@@ -26,7 +27,7 @@ class Message:
     }
     _base_message = {
         "message": {
-            "text": "기본 메시지",
+            "text": "원하시는 메뉴를 선택해주세요.",
         },
         "keyboard": _base_keyboard,
     }
@@ -260,14 +261,27 @@ class SuccessMessage(Message):
 
 
 class FindMessage(BaseMessage):
+    url = 'http://info.sweettracker.co.kr/api/v1/trackingInfo'
+    param = {
+        't_key': 'YgiWDsZs8XYMSu4p9AD4yA',
+        't_code': None,
+        't_invoice': None
+    }
+    delivery_center = {
+        '우체국택배': '01',
+        'CJ대한통운': '04',
+        '한진택배': '05',
+        '로젠택배': '06',
+        'KG로지스택배': '07',
+        'CU 편의점택배': '46'
+    }
+    
     def __init__(self, message, step):
         '''
         step 1: 택배 조회 -> 택배사 선택
         step 2: 택배사 선택 -> 송장정보 입력
         step 3: 송장정보 입력 -> 끝
         '''
-		
-        print('find message - message : '+str(message)+' / step : '+str(step))
 
         super().__init__()
         self.update_message(message)
@@ -280,7 +294,15 @@ class FindMessage(BaseMessage):
             }
             self.returned_message['keyboard'] = keyboard
         else:
-            self.update_keyboard(Keyboard.company_buttons)
+            self.param['t_code'] = self.delivery_center[message]
+            self.param['t_invoice'] = step
+            #response = requests.get(self.url, params=self.param).json()
+            
+            #self.update_message(response['lastDetail'])
+            #print('lastDetail: '+ response['lastDetail'])
+            self.update_message('helloworld')
+            self.update_keyboard(Keyboard.change_buttons)
+            print('returned_message: '+self.returned_message)
 
 
 class ReserveMessage(BaseMessage):

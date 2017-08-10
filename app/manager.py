@@ -1,4 +1,4 @@
-from app import db
+from app import db, session
 from .message import BaseMessage, HomeMessage, SuccessMessage, FailMessage, FindMessage
 from .model import User
 
@@ -45,16 +45,31 @@ class APIManager(metaclass=Singleton):
         user_key = data["user_key"]
         request_type = data["type"]
         content = data["content"]
-
-        if content == '택배 예약':
-            print('택배예약')
-        elif content == '택배 조회':
-            print('택배조회')
+        
+        step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
+        finding_step2 = ['한진택배', 'CJ대한통운', '현대택배', '우체국택배', 'TEST택배']    # step2 (finding)
+        
+        if content == '이전으로 돌아가기':
+            message = MessageHandler.get_base_message()
+        
+        if content in step1:
+            UserSessionAdmin.init(user_key, content)
+            if content == step1[0]:
+                message = MessageHandler.get_find_message(content, 1)
+            else:
+                message = MessageHandler.get_base_message()    # Temporary code line
+                
+        elif content in finding_step2:
+            UserSessionAdmin.init(user_key, content)
+            message = MessageHandler.get_find_message(content, 2)
+        
+        # 문제 발생...
         else:
-            print('헬로월드')
-
-        #message = MessageHandler.get_base_message()
-        message = MessageHandler.get_find_message('google', 1)
+            last = UserSessionAdmin.getHistory(user_key)
+            print('last: '+last)
+            message = MessageHandler.get_find_message(message, last)
+            
+        
         return message
 
     def add_friend(self, data):
@@ -92,8 +107,8 @@ class APIManager(metaclass=Singleton):
 
 
 class MessageManager(metaclass=Singleton):
-    def get_find_message(self, message, company):
-        find_message = FindMessage(message, company).get_message()
+    def get_find_message(self, message, step):
+        find_message = FindMessage(message, step).get_message()
         return find_message
 
     def get_base_message(self):
@@ -111,6 +126,30 @@ class MessageManager(metaclass=Singleton):
     def get_success_message(self):
         success_message = SuccessMessage().get_message()
         return success_message
+
+
+class UserSessionManager(metaclass=Singleton):
+    def checkExist(self, user_key):
+        return True if user_key in session else False
+
+    def init(self, user_key, content):
+        session[user_key] = {
+            "history": [content]
+        }
+
+    def delete(self, user_key):
+        if self.checkExist(user_key):
+            del session[user_key]
+
+    def addHistory(self, user_key, action):
+        if self.checkExist(user_key):
+            session[user_key]["history"].append(action)
+
+    def getHistory(self, user_key):
+        if self.checkExist(user_key):
+            return session[user_key]["history"][:]
+        else:
+            return ["택배 조회"]
 
 
 class DBManager(metaclass=Singleton):
@@ -141,4 +180,5 @@ class DBManager(metaclass=Singleton):
 
 APIHandler = APIManager()
 MessageHandler = MessageManager()
+UserSessionAdmin = UserSessionManager()
 DBHandler = DBManager()
