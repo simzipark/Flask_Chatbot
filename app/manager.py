@@ -12,6 +12,7 @@ class Singleton(type):
             cls.instance = super(Singleton, cls).__call__(*args, **kwargs)
         return cls.instance
 
+
 class APIManager(metaclass=Singleton):
     def process(self, mode, *args):
         try:
@@ -52,13 +53,16 @@ class APIManager(metaclass=Singleton):
             return message
         
         step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
-        #finding_step2 = ['한진택배', 'CJ대한통운', '현대택배', '우체국택배', 'TEST택배']    # step2 (finding)
-        finding_step2 = Keyboard.company_buttons
+        finding_step2 = Keyboard.company_buttons    # step2 (finding)
         
         if content in step1:
             UserSessionAdmin.init(user_key, content)
+            
+            # 택배 조회
             if content == step1[0]:
                 message = MessageHandler.get_find_message(content, 1)
+            
+            # 택배 예약
             else:
                 message = MessageHandler.get_base_message()    # Temporary code line
                 
@@ -67,9 +71,9 @@ class APIManager(metaclass=Singleton):
             message = MessageHandler.get_find_message(content, 2)
         
         else:
+            # 송장번호 입력이 들어온 경우
             last = UserSessionAdmin.getHistory(user_key)[0]
             message = MessageHandler.get_find_message(content, last)
-            #message = MessageHandler.get_base_message()
 
         return message
 
@@ -178,6 +182,7 @@ class DBManager(metaclass=Singleton):
 
     def commit(self):
         db.session.commit()
+
 
 APIHandler = APIManager()
 MessageHandler = MessageManager()

@@ -6,6 +6,7 @@ class Keyboard:
     '''
     home_buttons = [
         '택배 조회',
+        '방문 택배 예약',
         '편의점 택배 예약',
         '기타 설정',
     ]
