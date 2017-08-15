@@ -1,6 +1,7 @@
 from app import db, session
 from .message import BaseMessage, HomeMessage, SuccessMessage, FailMessage, FindMessage
 from .model import User
+from .keyboard import Keyboard
 
 
 class Singleton(type):
@@ -51,7 +52,8 @@ class APIManager(metaclass=Singleton):
             return message
         
         step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
-        finding_step2 = ['한진택배', 'CJ대한통운', '현대택배', '우체국택배', 'TEST택배']    # step2 (finding)
+        #finding_step2 = ['한진택배', 'CJ대한통운', '현대택배', '우체국택배', 'TEST택배']    # step2 (finding)
+        finding_step2 = Keyboard.company_buttons
         
         if content in step1:
             UserSessionAdmin.init(user_key, content)

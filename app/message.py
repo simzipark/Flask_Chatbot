@@ -270,7 +270,7 @@ class FindMessage(BaseMessage):
         '''
 
         super().__init__()
-        self.update_message(message)
+        self.update_message('%s를 선택하셨습니다.' % message)
 
         if step == 1:
             self.update_keyboard(Keyboard.company_buttons)
@@ -279,6 +279,7 @@ class FindMessage(BaseMessage):
                 'type': 'text',
             }
             self.returned_message['keyboard'] = keyboard
+            self.update_message('%s를 선택하셨습니다. 송장번호를 입력해주세요.' % message)
         else:
             info = get_delivery_info(step, message)
             msg = '[%s] %s' % info

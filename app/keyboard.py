@@ -11,7 +11,7 @@ class Keyboard:
     ]
 
     company_buttons = [
-        '이전으로 돌아가기'
+        '이전으로 돌아가기',
         '한진택배',
         'CJ대한통운',
         '로젠택배',
@@ -22,7 +22,7 @@ class Keyboard:
         '대신택배',
         '경동택배',
         'CVSnet 편의점택배',
-        'CU 편의점택배'
+        'CU 편의점택배',
         'EMS',
         'DHL',
         'UPS',
