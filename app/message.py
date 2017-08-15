@@ -306,8 +306,37 @@ class FindMessage(BaseMessage):
 
 
 class ReserveMessage(BaseMessage):
-    pass
-
+    def __init__(self, message,step):
+		""" step 1: 택배예약->보내는 사람 정보 입력
+			step 2: ->받는 사람 정보 입력
+			step 3: ->물건정보 입력
+			step 4: ->택배회사 선택
+			step 5: ->끝 """
+		super.__init__()
+		self.update_message(message)
+		
+		if step ==1:
+			keyboard = {
+                'type': 'text',
+            }
+            self.returned_message['keyboard'] = keyboard
+		
+		elif step ==2:
+			keyboard = {
+                'type': 'text',
+            }
+            self.returned_message['keyboard'] = keyboard
+		
+		elif step ==3:
+			keyboard = {
+                'type': 'text',
+            }
+            self.returned_message['keyboard'] = keyboard
+		
+		elif step ==4:
+			self.update_keyboard(Keyboard.company_buttons)
+		
+		else:
 
 class SettingMessage(BaseMessage):
     pass
