@@ -15,11 +15,11 @@ class APIManager(metaclass=Singleton):
     def process(self, mode, *args):
         try:
             options = {
-                "home": self.return_home_keyboard,
-                "message": self.handle_message,
-                "add": self.add_friend,
-                "block": self.block_friend,
-                "exit": self.exit_chatroom,
+                'home': self.return_home_keyboard,
+                'message': self.handle_message,
+                'add': self.add_friend,
+                'block': self.block_friend,
+                'exit': self.exit_chatroom,
             }
 
             message = options.get(mode)(*args)
@@ -31,20 +31,20 @@ class APIManager(metaclass=Singleton):
             return message, response_code
 
     def return_home_keyboard(self):
-        """
+        '''
         [GET] your_server_url/keyboard 일 때 사용되는 함수입니다.
-        """
+        '''
         message = MessageHandler.get_home_message()
         return message
 
     def handle_message(self, data):
-        """
+        '''
         [POST] your_server_url/message 일 때 사용되며
         사용자가 전달한 data에 따라 처리 과정을 거쳐 메시지를 반환하는 메인 함수입니다.
-        """
-        user_key = data["user_key"]
-        request_type = data["type"]
-        content = data["content"]
+        '''
+        user_key = data['user_key']
+        request_type = data['type']
+        content = data['content']
         
         if content == '이전으로 돌아가기':
             message = MessageHandler.get_base_message()
@@ -72,35 +72,35 @@ class APIManager(metaclass=Singleton):
         return message
 
     def add_friend(self, data):
-        """
+        '''
         [POST] your_server_url/friend 일 때 사용되는 함수입니다.
         기본 동작으로 수집된 user_key를 DB에 추가합니다.
-        """
-        user_key = data["user_key"]
+        '''
+        user_key = data['user_key']
         DBHandler.add_user(user_key)
         message = MessageHandler.get_success_message()
         return message
 
     def block_friend(self, user_key):
-        """
+        '''
         [DELETE] your_server_url/friend/{user_key} 일 때 사용되는 함수입니다.
         기본 동작으로 수집된 user_key를 DB에서 제거합니다.
-        """
+        '''
         DBHandler.delete_user(user_key)
         message = MessageHandler.get_success_message()
         return message
 
     def exit_chatroom(self, user_key):
-        """
+        '''
         [DELETE] your_server_url/chat_room/{user_key} 일 때 사용되는 함수입니다.
-        """
+        '''
         message = MessageHandler.get_success_message()
         return message
 
     def handle_fail(self):
-        """
+        '''
         처리 중 예외가 발생했을 때 사용되는 함수입니다.
-        """
+        '''
         message = MessageHandler.get_fail_message()
         return message
 
@@ -133,7 +133,7 @@ class UserSessionManager(metaclass=Singleton):
 
     def init(self, user_key, content):
         session[user_key] = {
-            "history": [content]
+            'history': [content]
         }
 
     def delete(self, user_key):
@@ -142,13 +142,13 @@ class UserSessionManager(metaclass=Singleton):
 
     def addHistory(self, user_key, action):
         if self.checkExist(user_key):
-            session[user_key]["history"].append(action)
+            session[user_key]['history'].append(action)
 
     def getHistory(self, user_key):
         if self.checkExist(user_key):
-            return session[user_key]["history"][:]
+            return session[user_key]['history'][:]
         else:
-            return ["택배 조회"]
+            return ['택배 조회']
 
 
 class DBManager(metaclass=Singleton):

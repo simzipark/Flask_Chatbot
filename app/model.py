@@ -12,11 +12,11 @@ class User(db.Model):
         self.user_key = user_key
         self.join_date = datetime.strftime(
             datetime.utcnow() + timedelta(hours=9),
-            "%Y.%m.%d %H:%M:%S")
+            '%Y.%m.%d %H:%M:%S')
         self.last_active_date = self.join_date
 
     def __repr__(self):
-        return "<User %r>" % (self.user_key)
+        return '<User %r>' % (self.user_key)
 
 '''
 class Delivery(db.model):
