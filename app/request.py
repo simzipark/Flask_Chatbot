@@ -32,10 +32,11 @@ def get_delivery_info(company, invoice):
     info = _get_delivery_response()
     
     try:
+        # Checking status == False
         info['status']
         return ('Error', '잘못된 송장번호입니다.')
     
     except KeyError:
+        # status != False
         info = info['lastDetail']
-        print(info)
         return (info['timeString'], info['kind'])

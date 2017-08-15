@@ -282,7 +282,6 @@ class FindMessage(BaseMessage):
         else:
             info = get_delivery_info(step, message)
             msg = '[%s] %s' % info
-            print(msg)
             self.update_message(msg)
             self.update_keyboard(Keyboard.change_buttons)
 
