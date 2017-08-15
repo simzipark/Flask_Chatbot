@@ -34,7 +34,7 @@ def get_delivery_info(company, invoice):
     try:
         # Checking status == False
         info['status']
-        return ('Error', '잘못된 송장번호입니다.')
+        return ('Error', '잘못된 송장번호입니다. 다시 입력해주세요. (처음으로 돌아가시려면 "이전으로 돌아가기"를 입력해주세요.)')
     
     except KeyError:
         # status != False

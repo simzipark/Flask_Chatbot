@@ -283,7 +283,14 @@ class FindMessage(BaseMessage):
             info = get_delivery_info(step, message)
             msg = '[%s] %s' % info
             self.update_message(msg)
-            self.update_keyboard(Keyboard.change_buttons)
+            
+            if info[0] == 'Error':
+                keyboard = {
+                    'type': 'text',
+                }
+                self.returned_message['keyboard'] = keyboard
+            else:
+            	self.update_keyboard(Keyboard.change_buttons)
 
 
 class ReserveMessage(BaseMessage):
