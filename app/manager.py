@@ -46,11 +46,12 @@ class APIManager(metaclass=Singleton):
         request_type = data["type"]
         content = data["content"]
         
-        step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
-        finding_step2 = ['한진택배', 'CJ대한통운', '현대택배', '우체국택배', 'TEST택배']    # step2 (finding)
-        
         if content == '이전으로 돌아가기':
             message = MessageHandler.get_base_message()
+            return message
+        
+        step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
+        finding_step2 = ['한진택배', 'CJ대한통운', '현대택배', '우체국택배', 'TEST택배']    # step2 (finding)
         
         if content in step1:
             UserSessionAdmin.init(user_key, content)
@@ -63,13 +64,11 @@ class APIManager(metaclass=Singleton):
             UserSessionAdmin.init(user_key, content)
             message = MessageHandler.get_find_message(content, 2)
         
-        # 문제 발생...
         else:
-            last = UserSessionAdmin.getHistory(user_key)
-            print('last: '+last)
-            message = MessageHandler.get_find_message(message, last)
-            
-        
+            last = UserSessionAdmin.getHistory(user_key)[0]
+            message = MessageHandler.get_find_message(content, last)
+            #message = MessageHandler.get_base_message()
+
         return message
 
     def add_friend(self, data):

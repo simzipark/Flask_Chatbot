@@ -1,6 +1,7 @@
 import requests
-from .keyboard import Keyboard
 from ujson import dumps, loads
+from .keyboard import Keyboard
+from .request import get_delivery_info
 
 
 class classproperty(object):
@@ -261,21 +262,6 @@ class SuccessMessage(Message):
 
 
 class FindMessage(BaseMessage):
-    url = 'http://info.sweettracker.co.kr/api/v1/trackingInfo'
-    param = {
-        't_key': 'YgiWDsZs8XYMSu4p9AD4yA',
-        't_code': None,
-        't_invoice': None
-    }
-    delivery_center = {
-        '우체국택배': '01',
-        'CJ대한통운': '04',
-        '한진택배': '05',
-        '로젠택배': '06',
-        'KG로지스택배': '07',
-        'CU 편의점택배': '46'
-    }
-    
     def __init__(self, message, step):
         '''
         step 1: 택배 조회 -> 택배사 선택
@@ -294,15 +280,11 @@ class FindMessage(BaseMessage):
             }
             self.returned_message['keyboard'] = keyboard
         else:
-            self.param['t_code'] = self.delivery_center[message]
-            self.param['t_invoice'] = step
-            #response = requests.get(self.url, params=self.param).json()
-            
-            #self.update_message(response['lastDetail'])
-            #print('lastDetail: '+ response['lastDetail'])
-            self.update_message('helloworld')
+            info = get_delivery_info(step, message)
+            msg = '[%s] %s' % info
+            print(msg)
+            self.update_message(msg)
             self.update_keyboard(Keyboard.change_buttons)
-            print('returned_message: '+self.returned_message)
 
 
 class ReserveMessage(BaseMessage):
