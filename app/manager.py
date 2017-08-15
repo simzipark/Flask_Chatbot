@@ -65,7 +65,8 @@ class APIManager(metaclass=Singleton):
             # 택배 예약
             else:
                 message = MessageHandler.get_base_message()    # Temporary code line
-                
+        
+        # 택배 예약 2단계 - 배송 회사 선택
         elif content in finding_step2:
             UserSessionAdmin.init(user_key, content)
             message = MessageHandler.get_find_message(content, 2)
