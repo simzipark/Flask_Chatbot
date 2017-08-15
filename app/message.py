@@ -294,6 +294,21 @@ class FindMessage(BaseMessage):
             	self.update_keyboard(Keyboard.change_buttons)
 
 
+class ConvenienceMessage(BaseMessage):
+    def __init__(self, message, step):
+        super().__init__()
+        self.update_message('%s 메뉴를 선택하셨습니다.\n어쩌구 저쩌구' % message)
+        
+        if step == 1:
+            self.update_keyboard(Keyboard.conv_buttons)
+
+        elif step == 2:
+            self.update_message('%s 을(를) 선택하셨습니다.\n보내시는분의 성함을 입력해주세욤.' % message)
+            keyboard = {
+                'type': 'text',
+            }
+            self.returned_message['keyboard'] = keyboard
+
 class ReserveMessage(BaseMessage):
     def __init__(self, message, step):
         '''

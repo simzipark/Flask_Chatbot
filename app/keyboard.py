@@ -10,6 +10,12 @@ class Keyboard:
         '편의점 택배 예약',
         '기타 설정',
     ]
+	
+    conv_buttons = [
+        'GS25',
+        'CU',
+        '세븐일레븐',
+	]
 
     company_buttons = [
         '이전으로 돌아가기',

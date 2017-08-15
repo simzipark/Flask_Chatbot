@@ -1,5 +1,5 @@
 from app import db, session
-from .message import BaseMessage, HomeMessage, SuccessMessage, FailMessage, FindMessage
+from .message import BaseMessage, HomeMessage, SuccessMessage, FailMessage, FindMessage, ConvenienceMessage
 from .model import User
 from .keyboard import Keyboard
 
@@ -54,6 +54,7 @@ class APIManager(metaclass=Singleton):
         
         step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
         finding_step2 = Keyboard.company_buttons    # step2 (finding)
+        conv_step2 = Keyboard.conv_buttons
         
         if content in step1:
             UserSessionAdmin.init(user_key, content)
@@ -61,6 +62,10 @@ class APIManager(metaclass=Singleton):
             # 택배 조회
             if content == step1[0]:
                 message = MessageHandler.get_find_message(content, 1)
+	       
+            # 편의점 택배 예약
+            elif content == step1[1]:
+                message = MessageHandler.get_conv_message(content, 1)
             
             # 택배 예약
             else:
@@ -70,7 +75,11 @@ class APIManager(metaclass=Singleton):
         elif content in finding_step2:
             UserSessionAdmin.init(user_key, content)
             message = MessageHandler.get_find_message(content, 2)
-        
+
+        elif content in conv_step2:
+            UserSessionAdmin.init(user_key, content)
+            message = MessageHandler.get_conv_message(content, 2)
+
         else:
             # 송장번호 입력이 들어온 경우
             last = UserSessionAdmin.getHistory(user_key)[0]
@@ -116,6 +125,10 @@ class MessageManager(metaclass=Singleton):
     def get_find_message(self, message, step):
         find_message = FindMessage(message, step).get_message()
         return find_message
+	
+    def get_conv_message(self, message, step):
+        conv_message = ConvenienceMessage(message, step).get_message()
+        return conv_message
 
     def get_base_message(self):
         base_message = BaseMessage().get_message()
