@@ -36,3 +36,8 @@ class Keyboard:
         '장소 변경',
         '이전으로 돌아가기'
     ]
+    
+    check_buttons = [
+        '확인',
+        '취소',
+    ]

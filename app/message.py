@@ -295,41 +295,56 @@ class FindMessage(BaseMessage):
 
 
 class ReserveMessage(BaseMessage):
-	def __init__(self, message, step):
-		'''
-		step 1: 택배예약 -> 보내는 사람 정보 입력
-		step 2: -> 받는 사람 정보 입력
-		step 3: -> 물건정보 입력
-		step 4: -> 택배회사 선택
-		step 5: -> 끝
-		'''
-		
-		super.__init__()
-		self.update_message(message)
-		
-		if step == 1:
-			keyboard = {
-				'type': 'text',
-			}
-			self.returned_message['keyboard'] = keyboard
-		
-		elif step == 2:
-			keyboard = {
-				'type': 'text',
-			}
-			self.returned_message['keyboard'] = keyboard
-		
-		elif step == 3:
-			keyboard = {
-				'type': 'text',
-			}
-			self.returned_message['keyboard'] = keyboard
-		
-		elif step == 4:
-			self.update_keyboard(Keyboard.company_buttons)
-		
-		else:
-			pass
-		
+    def __init__(self, message, step):
+        '''
+        step 1: 택배예약 -> 보내는 사람 정보 입력
+        step 2: -> 받는 사람 정보 입력
+        step 3: -> 물건정보 입력
+        step 4: -> 택배회사 선택
+        step 5: -> 끝
+        '''
+        
+        super.__init__()
+        self.update_message('%s을(를) 선택하셨습니다.' % message)
+        
+        keyboard = {
+                'type': 'text',
+        }
+        self.returned_message['keyboard'] = keyboard
+        
+        if step == 1:
+            self.update_message('[STEP 1/9] 보내는 분의 성함을 입력해주세요.')
+        
+        elif step == 2:
+            self.update_message('[STEP 2/9] 보내는 분의 연락처를 입력해주세요.')
+        
+        elif step == 3:
+            self.update_message('[STEP 3/9] 보내는 분의 주소를 입력해주세요.')
+            
+        elif step == 4:
+            self.update_message('[STEP 4/9] 받는 분의 성함을 입력해주세요.')
+        
+        elif step == 5:
+            self.update_message('[STEP 5/9] 받는 분의 연락처를 입력해주세요.')
+        
+        elif step == 6:
+            self.update_message('[STEP 6/9] 받는 분의 주소를 입력해주세요.')
+        
+        elif step == 7:
+            self.update_message('[STEP 7/9] 택배 회사를 선택해주세요.')
+            self.update_keyboard(Keyboard.company_buttons)
+        
+        elif step == 8:
+            self.update_message('[STEP 8/9] 물품의 상세 정보를 입력해주세요. (Ex. 귀금속, 유리그릇, 생선, 애완 가재, ..)')
+            
+        elif step == 9:
+            self.update_message('[STEP 9/9] 배송 시 유의 사항이나 기타 메모 등을 남겨주세요.')
+        
+        # 최종 예약 정보 확인
+        else:
+            self.update_message('입력하신 정보가 맞는지 확인해주세요.')
+            self.update_keyboard(Keyboard.check_buttons)
+
+
 class SettingMessage(BaseMessage):
     pass
