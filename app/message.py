@@ -2,6 +2,7 @@ import requests
 from ujson import dumps, loads
 from .keyboard import Keyboard
 from .request import get_delivery_info
+from .model import Delivery
 
 
 class classproperty(object):
@@ -303,11 +304,27 @@ class ConvenienceMessage(BaseMessage):
             self.update_keyboard(Keyboard.conv_buttons)
 
         elif step == 2:
-            self.update_message('%s 을(를) 선택하셨습니다.\n보내시는분의 성함을 입력해주세욤.' % message)
+            self.update_message('%s 을(를) 선택하셨습니다.\n[STEP 1/9] 보내는 분의 성함을 입력해주세요.' % message)
+            self.update_keyboard(Keyboard.name_buttons)
+
+        elif step == 3:
+            self.update_message('[STEP 2/9] 보내는 분의 연락처를 입력해주세요.')
             keyboard = {
                 'type': 'text',
             }
             self.returned_message['keyboard'] = keyboard
+
+        elif step == 4:
+            self.update_message('[STEP 3/9] 보내는 분의 주소를 입력해주세요.')
+            keyboard = {
+                'type': 'text',
+            }
+            self.returned_message['keyboard'] = keyboard
+
+
+
+
+
 
 class ReserveMessage(BaseMessage):
     def __init__(self, message, step):

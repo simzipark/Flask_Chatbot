@@ -47,43 +47,23 @@ class APIManager(metaclass=Singleton):
         user_key = data['user_key']
         request_type = data['type']
         content = data['content']
+
+        step1 = Keyboard.home_buttons
+        conv_step2 = Keyboard.conv_buttons
         
         if content == '이전으로 돌아가기':
             message = MessageHandler.get_base_message()
             return message
-        
-        step1 = ['택배 조회', '편의점 택배 예약']    # step1 data
-        finding_step2 = Keyboard.company_buttons    # step2 (finding)
-        conv_step2 = Keyboard.conv_buttons
-        
-        if content in step1:
-            UserSessionAdmin.init(user_key, content)
-            
-            # 택배 조회
-            if content == step1[0]:
-                message = MessageHandler.get_find_message(content, 1)
-	       
-            # 편의점 택배 예약
-            elif content == step1[1]:
-                message = MessageHandler.get_conv_message(content, 1)
-            
-            # 택배 예약
-            else:
-                message = MessageHandler.get_base_message()    # Temporary code line
-        
-        # 택배 예약 2단계 - 배송 회사 선택
-        elif content in finding_step2:
-            UserSessionAdmin.init(user_key, content)
-            message = MessageHandler.get_find_message(content, 2)
 
-        elif content in conv_step2:
-            UserSessionAdmin.init(user_key, content)
-            message = MessageHandler.get_conv_message(content, 2)
 
+        elif UserSessionAdmin.checkExist(user_key):
+            UserSessionAdmin.addHistory(user_key, content)
+            message = MessageHandler.get_conv_message(content, #유저세션 히스토리의 크기만큼을 step으로)
+        
         else:
-            # 송장번호 입력이 들어온 경우
-            last = UserSessionAdmin.getHistory(user_key)[0]
-            message = MessageHandler.get_find_message(content, last)
+            UserSessionAdmin.init(user_key, content)
+            if content == step[2]
+                message = MessageHandler.get_conv_message(content, 1)
 
         return message
 
